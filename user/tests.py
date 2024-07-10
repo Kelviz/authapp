@@ -10,8 +10,8 @@ class UserRegistrationTest(APITestCase):
     def test_register_user_successfully_with_default_organisation(self):
         url = reverse('register')
         data = {
-            'first_name': 'John',
-            'last_name': 'Doe',
+            'firstName': 'John',
+            'lastName': 'Doe',
             'email': 'john.doe@example.com',
             'password': 'password123',
             'phone': '1234567890'
@@ -19,7 +19,7 @@ class UserRegistrationTest(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn('accessToken', response.data['data'])
-        self.assertEqual(response.data['data']['user']['first_name'], 'John')
+        self.assertEqual(response.data['data']['user']['firstName'], 'John')
         self.assertEqual(response.data['data']['user']['email'], 'john.doe@example.com')
         self.assertTrue(Organization.objects.filter(name="John's Organization").exists())
 
@@ -27,37 +27,37 @@ class UserRegistrationTest(APITestCase):
 
 
 class UserRegistrationValidationTest(APITestCase):
-    def test_missing_first_name(self):
+    def test_missing_firstName(self):
         url = reverse('register')
         data = {
-            'first_name': '',
-            'last_name': 'Doe',
+            'firstName': '',
+            'lastName': 'Doe',
             'email': 'john.doe@example.com',
             'password': 'password123',
             'phone': '1234567890'
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)
-        self.assertIn('first_name', response.data['error'], "Empty fields found: first_name")
+        self.assertIn('firstName', response.data['error'], "Empty fields found: firstName")
 
-    def test_missing_last_name(self):
+    def test_missing_lastName(self):
         url = reverse('register')
         data = {
-            'first_name': 'John',
-            'last_name': '',
+            'firstName': 'John',
+            'lastName': '',
             'email': 'john.doe@example.com',
             'password': 'password123',
             'phone': '1234567890'
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)
-        self.assertIn('last_name', response.data['error'], "Empty fields found: last_name")
+        self.assertIn('lastName', response.data['error'], "Empty fields found: lastName")
 
     def test_missing_email(self):
         url = reverse('register')
         data = {
-            'first_name': 'John',
-            'last_name': 'Doe',
+            'firstName': 'John',
+            'lastName': 'Doe',
             'email': '',
             'password': 'password123',
             'phone': '1234567890'
@@ -69,8 +69,8 @@ class UserRegistrationValidationTest(APITestCase):
     def test_missing_password(self):
         url = reverse('register')
         data = {
-            'first_name': 'John',
-            'last_name': 'Doe',
+            'firstName': 'John',
+            'lastName': 'Doe',
             'email': 'john.doe@example.com',
             'phone': '1234567890',
             'password': ''
@@ -84,8 +84,8 @@ class UserRegistrationDuplicateTest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             email='john.doe@example.com',
-            first_name='John',
-            last_name='Doe',
+            firstName='John',
+            lastName='Doe',
             password='password123',
             phone='1234567890'
         )
@@ -93,8 +93,8 @@ class UserRegistrationDuplicateTest(APITestCase):
     def test_duplicate_email(self):
         url = reverse('register')
         data = {
-            'first_name': 'Jane',
-            'last_name': 'Doe',
+            'firstName': 'Jane',
+            'lastName': 'Doe',
             'email': 'john.doe@example.com',
             'password': 'password123',
             'phone': '0987654321'
@@ -110,8 +110,8 @@ class UserLoginTest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             email='john.doe@example.com',
-            first_name='John',
-            last_name='Doe',
+            firstName='John',
+            lastName='Doe',
             password='password123',
             phone='1234567890'
         )

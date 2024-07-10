@@ -28,7 +28,7 @@ class RegisterView(APIView):
             try:
                 user = serializer.save()
                 organization = Organization.objects.create(
-                        name=f"{user.first_name}'s Organization",
+                        name=f"{user.firstName}'s Organization",
                         description = f"This organization was created by {user.get_full_name()}"
                 )
                 organization.users.add(user)
@@ -62,7 +62,7 @@ class LoginView(APIView):
     permission_classes = []
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
-        empty_fields = [field for field, value in request.data.items() if value in [None, '', []]]
+        empty_fields = [field for field, value in request.data.items() if value in [None, '', []] and field != 'phone']
         if empty_fields:
                         error_message = f"Empty fields found: {', '.join(empty_fields)}"
                         return Response({"error": error_message, }, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
@@ -117,8 +117,8 @@ class UserListAndDetailView(viewsets.ModelViewSet):
                 'message': 'User retrieved successfully',
                 'data': {
                         'userId': serializer.data['user_id'],
-                        'firtName': serializer.data['first_name'],
-                        'lastName': serializer.data['last_name'],
+                        'firtName': serializer.data['firstName'],
+                        'lastName': serializer.data['lastName'],
                         'email': serializer.data['email'],
                         'phone': serializer.data['phone']
                 }

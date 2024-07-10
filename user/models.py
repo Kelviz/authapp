@@ -32,9 +32,9 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)
     email = models.EmailField(max_length=255, unique=True, null=False)
-    first_name = models.CharField(max_length=255, null=False)
-    last_name = models.CharField(max_length=255, null=False)
-    phone = models.CharField(max_length=15, null=False)
+    firstName = models.CharField(max_length=255, null=False)
+    lastName = models.CharField(max_length=255, null=False)
+    phone = models.CharField(max_length=15, null=True, blank=True)
     objects = UserManager()
 
     groups = models.ManyToManyField(Group, related_name='user_accounts')
@@ -42,10 +42,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         Permission, related_name='user_accounts')
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    REQUIRED_FIELDS = ['firstName', 'lastName']
 
     def get_full_name(self):
-        return f'{self.first_name}-{self.last_name}' 
+        return f'{self.firstName}-{self.lastName}' 
 
     
     def __str__(self):
