@@ -43,6 +43,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'authapp.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
