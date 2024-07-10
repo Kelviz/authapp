@@ -18,7 +18,7 @@ class RegisterView(APIView):
     permission_classes = []
     def post(self, request):
         serializer = UserCreateSerializer(data=request.data)
-        empty_fields = [field for field, value in request.data.items() if value in [None, '', []]]
+        empty_fields = [field for field, value in request.data.items() if value in [None, '', []] and field != 'phone']
         if empty_fields:
                         error_message = f"Empty fields found: {', '.join(empty_fields)}"
                         return Response({"error": error_message, }, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
